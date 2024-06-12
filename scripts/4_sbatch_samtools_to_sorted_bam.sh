@@ -2,12 +2,12 @@
 #SBATCH --partition=short
 #SBATCH --job-name=samtools_to_sorted_bam
 #SBATCH --time=04:00:00
-#SBATCH --array=1-6%7
-#SBATCH --ntasks=6
+#SBATCH --array=1-12%13
+#SBATCH --ntasks=12
 #SBATCH --mem=100G
 #SBATCH --cpus-per-task=1
-#SBATCH --output=/work/geisingerlab/Mark/rnaSeq/2024-06-07_bowtie_sRNAs-from-palethorpe/logs/%x-%j.log
-#SBATCH --error=/work/geisingerlab/Mark/rnaSeq/2024-06-07_bowtie_sRNAs-from-palethorpe/logs/%x-%j.err
+#SBATCH --output=/work/geisingerlab/Mark/rnaSeq/2024-06-11_sRNAs_from_eg_2020_bfmRS/logs/%x-%j-%a.log
+#SBATCH --error=/work/geisingerlab/Mark/rnaSeq/2024-06-11_sRNAs_from_eg_2020_bfmRS/logs/%x-%j-%a.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=soo.m@northeastern.edu
 
@@ -33,15 +33,15 @@ current_name=$(basename "$current_file")
 current_name_no_ext="${current_name%.*}"
 
 echo "converting .sam to .bam"
-samtools view -bS "${current_file}" > ${MAPPED_DIR}/${current_name_no_ext}.bam
+echo samtools view -bS "${current_file}" > ${MAPPED_DIR}/${current_name_no_ext}.bam
 echo "sorting bam file"
-samtools sort ${MAPPED_DIR}/${current_name_no_ext}.bam -o "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam
+echo samtools sort ${MAPPED_DIR}/${current_name_no_ext}.bam -o "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam
 echo "analyzing alignment statistics"
-samtools stats "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam > "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam.stats
+echo samtools stats "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam > "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam.stats
 
 echo "cleaning up: moving .sam and unsorted .bam files to $MAPPED_DIR/intermediate_files"
-mkdir -p $MAPPED_DIR/intermediate_files
+echo mkdir -p $MAPPED_DIR/intermediate_files
 echo "moving ${current_file}"
-mv ${current_file} intermediate_files/
+echo mv ${current_file} intermediate_files/
 echo "moving ${current_file}${current_name_no_ext}.bam"
-mv "${current_name_no_ext}".bam intermediate_files/
+echo mv "${current_name_no_ext}".bam intermediate_files/
