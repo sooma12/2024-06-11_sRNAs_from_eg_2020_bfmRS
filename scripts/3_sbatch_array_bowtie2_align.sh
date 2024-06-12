@@ -2,8 +2,8 @@
 #SBATCH --partition=short
 #SBATCH --job-name=alignRNA_bowtie
 #SBATCH --time=08:00:00
-#SBATCH --array=1-6%7
-#SBATCH --ntasks=6
+#SBATCH --array=1-12%13
+#SBATCH --ntasks=12
 #SBATCH --mem=100G
 #SBATCH --cpus-per-task=8
 #SBATCH --output=/work/geisingerlab/Mark/rnaSeq/2024-06-07_bowtie_sRNAs-from-palethorpe/logs/%x-%j-%a.log
@@ -30,10 +30,9 @@ mkdir -p $MAPPED_DIR
 
 # sed and awk read through the sample sheet and grab each whitespace-separated value
 name=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_SHEET_PATH |  awk '{print $1}')
-r1=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_SHEET_PATH |  awk '{print $2}')
-r2=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_SHEET_PATH |  awk '{print $3}')
+fq=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_SHEET_PATH |  awk '{print $2}')
 
-echo "Running Bowtie2 on files $r1 and $r2"
+echo "Running Bowtie2 on $fq"
 
 # Bowtie2 in paired end mode
-bowtie2 --local -p 8 -x $BT2_OUT_BASE -q -1 $r1 -2 $r2 -S $MAPPED_DIR/$name.sam
+bowtie2 --local -p 8 -x $BT2_OUT_BASE --no-unal -q -U $fq -S $MAPPED_DIR/$name.sam
