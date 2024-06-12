@@ -33,15 +33,15 @@ current_name=$(basename "$current_file")
 current_name_no_ext="${current_name%.*}"
 
 echo "converting .sam to .bam"
-echo samtools view -bS "${current_file}" > ${MAPPED_DIR}/${current_name_no_ext}.bam
+samtools view -bS "${current_file}" > ${MAPPED_DIR}/${current_name_no_ext}.bam
 echo "sorting bam file"
-echo samtools sort ${MAPPED_DIR}/${current_name_no_ext}.bam -o "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam
+samtools sort ${MAPPED_DIR}/${current_name_no_ext}.bam -o "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam
 echo "analyzing alignment statistics"
-echo samtools stats "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam > "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam.stats
+samtools stats "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam > "${MAPPED_DIR}/${current_name_no_ext}"_sorted.bam.stats
 
 echo "cleaning up: moving .sam and unsorted .bam files to $MAPPED_DIR/intermediate_files"
-echo mkdir -p $MAPPED_DIR/intermediate_files
+mkdir -p $MAPPED_DIR/intermediate_files
 echo "moving ${current_file}"
-echo mv ${current_file} intermediate_files/
+mv ${current_file} $MAPPED_DIR/intermediate_files
 echo "moving ${current_file}${current_name_no_ext}.bam"
-echo mv "${current_name_no_ext}".bam intermediate_files/
+mv $MAPPED_DIR/"${current_name_no_ext}".bam $MAPPED_DIR/intermediate_files
