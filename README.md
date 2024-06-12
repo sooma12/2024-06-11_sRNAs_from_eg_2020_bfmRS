@@ -30,5 +30,12 @@ Two column sample sheet with sample name and fastq path
 
 5. Samtools
 
+Used samtools to convert .sam to .bam; sort .bam files; and get .bam alignment statistics
 
+6. Count table
 
+Aggregated reads to features using featureCounts
+
+7. Differential expression analysis
+
+With DESeq2
